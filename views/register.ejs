@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title><%- title %> | Login</title>
+    <title><%- title %> | Register</title>
     <meta name="viewport" content="width=device-width, intiial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
@@ -10,7 +10,7 @@
   <body>
     <div class="header__form container">
       <div data-aos='zoom-in' data-aos-delay='50' data-aos-duration='1000' class="parent__form">
-        <h1 class="header__text__form">Sign In</h1>
+        <h1 class="header__text__form">Sign Up</h1>
           <% if(error.length > 0) { %>
             <div class="alert alert-danger" role="alert">
               <b><%- error %></b>
@@ -29,10 +29,9 @@
               <label class="custom-control-label" for="show">show password</label>
             </div>
           </div>
-          <button type="submit">Sign In</button>
+          <button type="submit">Sign Up</button>
           <div class="action">
-            <a href="/register">Don't have an account yet?</a>
-            <a href="/forgot-password">Forgot password</a>
+            <a href="/login">Already have an account yet?</a>
           </div>
         </form>
       </div>

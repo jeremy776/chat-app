@@ -72,6 +72,15 @@ app.post("/login", passport.authenticate("local",{
 });
 // END LOGIN
 
+// Register GET & POST
+app.get('/register', function(req, res) {
+  res.render('register.ejs', {
+    title: title,
+    error: req.flash('error')
+  });
+});
+//END REGISTER
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
