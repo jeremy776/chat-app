@@ -55,6 +55,16 @@ body {
   margin-top: 20px!important;
   font-size: 13px;
 }
+
+.error__parent {
+  font-size: 13px;
+  background-color: red;
+  padding: 5px;
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);
+}
+
 /* DEKSTOP VERSION */
 @media (min-width: 769px) {
   body {

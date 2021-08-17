@@ -3,6 +3,16 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const bodyParser = require("body-parser");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const mongooseLocal = require("passport-local-mongoose");
+const mongoose = require("mongoose");
+const flash = require("connect-flash");
+const ManageUser = require("./models/User");
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGOOSEURL, { useNewUrlParser: true });
 
 const app = express();
 const title = "JustTry";
@@ -13,12 +23,31 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(flash());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require("express-session")({
+    secret:"verysecretyo",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new localStrategy({
+  usernameField: "email",
+  passwordField: "password"
+}, ManageUser.authenticate()));
+passport.serializeUser(ManageUser.serializeUser());
+passport.deserializeUser(ManageUser.deserializeUser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // "/" = Get home page
 app.get("/", function(req, res) {
+  console.log(process.env.MONGOOSEURL);
   res.render("index.ejs", {
     title: title
   });
@@ -29,8 +58,17 @@ app.get("/", function(req, res) {
 // Login - GET & POST
 app.get('/login', function(req, res) {
   res.render("login.ejs", {
-    title: title
+    title: title,
+    error: req.flash("error")
   });
+});
+
+app.post("/login", passport.authenticate("local",{
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true
+}), function(req, res){
+    
 });
 // END LOGIN
 
