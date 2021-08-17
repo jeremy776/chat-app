@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #8ce6fc;
+  transition: all 0.6s ease;
+}
+.header__form .parent__form {
+  padding: 40px;
+  border-radius: 7px;
+}
+.header__form .parent__form .header__text__form {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header__form .parent__form .input-group {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.header__form .parent__form .input-group input {
+  width: 100%;
+  border-radius: 4px;
+}
+.header__form .parent__form form .action {
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  margin-top: 25px;
+}
+.header__form .parent__form form .action a {
+  margin-top: 10px;
+}
+.header__form .parent__form form .action a:hover {
+  text-decoration: none;
+  color: #0001ff !important;
+}
+.header__form .parent__form form button:hover {
+  background-color: #0098ff;
+}
+.header__form .parent__form form button {
+  width: 100%;
+  transition: all 0.4s ease;
+  margin-top: 10px;
+  padding: 9px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  background-color: #656efa;
+}
+.custom-checkbox {
+  margin-top: 20px!important;
+  font-size: 13px;
+}
+/* DEKSTOP VERSION */
+@media (min-width: 769px) {
+  body {
+    background-color: #007dff;
+  }
+  .header__form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  }
+  .header__form .parent__form {
+    background: #fff;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.3);
+    width: 55%;
+  }
+}
