@@ -1,111 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 body {
-  font-family: sans-serif;
-  background-color: #d3ebf1;
-  transition: all 0.6s ease;
-  overflow: hidden !important;
+  padding: 27px;
 }
-.header__form .parent__form {
-  padding: 40px;
-  border-radius: 7px;
-}
-.header__form .parent__form .header__text__form {
+.header {
   text-align: center;
-  margin-bottom: 30px;
 }
-.header__form .parent__form .input-group {
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
+.ui.card {
   width: 100%;
 }
-.header__form .parent__form .input-group input {
+.submitButton {
+  margin-top: 15px!important;
   width: 100%;
-  border-radius: 4px;
 }
-.header__form .parent__form form .action {
-  font-size: 15px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.content-1 {
+  background-color: #c9f4ff !important;
+}
+.content-1 .header {
+  color: black !important;
+}
+.action {
+  margin-top: 20px;
   text-align: center;
-  margin-top: 25px;
 }
-.header__form .parent__form form .action a {
-  margin-top: 10px;
-}
-.header__form .parent__form form .action a:hover {
-  text-decoration: none;
-  color: #0001ff !important;
-}
-.header__form .parent__form form button:hover {
-  background-color: #0098ff;
-}
-.header__form .parent__form form button {
-  width: 100%;
-  transition: all 0.4s ease;
-  margin-top: 10px;
-  padding: 9px;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-weight: 600;
-  background-color: #656efa;
-}
-.custom-checkbox {
-  margin-top: 20px!important;
-  font-size: 13px;
-}
-
-.error__parent {
-  font-size: 13px;
-  background-color: red;
-  padding: 5px;
-  color: white;
-  border-radius: 4px;
-  box-shadow: 0 0 7px rgba(0,0,0,0.2);
+.message {
+  margin-bottom: 25px !important;
 }
 
 /* DEKSTOP VERSION */
 @media (min-width: 769px) {
-  body {
-    background-color: #007dff;
+  .ui.card {
+    width: 35%;
   }
-  .header__form {
+  .parent {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 95vh;
-  }
-  .header__form .parent__form {
-    background: linear-gradient(to bottom, #eee, #fff);
-    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.3);
-    width: 35%;
-  }
-  body::before {
-    content: '';
-    position: absolute;
-    background-color: #878ee9;
-    width: 300px;
-    transform: rotate(45deg);
-    height: 150px;
-    opacity: .7;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    transition: all 0.5s ease;
-    border-radius: 7px;
-    left: 0;
-  }
-  body::after {
-    content: '';
-    position: absolute;
-    background-color: #878ee9;
-    width: 350px;
-    transform: rotate(45deg);
-    height: 150px;
-    right: 0;
-    opacity: .7;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    transition: all 0.5s ease;
-    border-radius: 7px;
+    height: 100%;
   }
 }

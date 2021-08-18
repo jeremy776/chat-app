@@ -1,48 +1,124 @@
 <!doctype html>
 <html>
-  <head>
-    <title><%- title %> | Register</title>
-    <meta name="viewport" content="width=device-width, intiial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
-    <link rel='stylesheet' href='https://unpkg.com/aos@next/dist/aos.css'>
-  </head>
-  <body>
-    <div class="header__form container">
-      <div data-aos='zoom-in' data-aos-delay='50' data-aos-duration='1000' class="parent__form">
-        <h1 class="header__text__form">Sign Up</h1>
-          <% if(error.length > 0) { %>
-            <div class="alert alert-danger" role="alert">
-              <b><%- error %></b>
-            </div>
-          <% } %>
-        <form autocomplete="off" method="POST">
-          <div class="input-group">
+<head>
+  <title><%- title %> | Register</title>
+  <meta name="viewport" content="width=device-width, intiial-scale=1">
+  <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+              <link rel='stylesheet' href='https://unpkg.com/aos@next/dist/aos.css'>-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <div class="parent">
+    <div class="ui card">
+      <div class="content-1 content">
+        <div class="header">
+          Sing Up
+        </div>
+      </div>
+      <div class="content-2 content">
+        <form autocomplete="off" method="POST" class="ui form">
+
+          <div class="ui warning message">
+            <ul class="list">
+
+            </ul>
+          </div>
+
+          <div id="usernameField" class="field">
+            <label for="username">Display name</label>
+            <input type="text" id="username" placeholder="John Doe" name="username" required>
+          </div>
+          <div class="field">
             <label for="email">Email</label>
-            <input type="email" placeholder="example@gmail.com" class="form-control" name="email" required>
+            <input type="email" placeholder="example@gmail.com" name="email" required>
           </div>
-          <div class="input-group">
+          <div id="passwordField" class="field">
             <label for="password">Password</label>
-            <input type="password" placeholder="••••••" class="form-control password" name="password" required>
-            <div class="custom-control custom-checkbox my-1 mr-sm-2">
-              <input type="checkbox" class="custom-control-input" id="show">
-              <label class="custom-control-label" for="show">show password</label>
-            </div>
+            <input type="password" placeholder="Password" id="password" name="password" required>
           </div>
-          <button type="submit">Sign Up</button>
+          <div id="confrimPasswordField" class="field">
+            <label for="confrimPassword">Confrim password</label>
+            <input type="password" placeholder="Confrim password" id="confrimPassword" name="confrimPassword" required>
+          </div>
+
+
+          <button class="ui primary button submitButton" type="submit">Sing Up</button>
           <div class="action">
-            <a href="/login">Already have an account yet?</a>
+            <a href="/login">Already have an account?</a>
           </div>
         </form>
       </div>
     </div>
-    
-    <script src="./script.js"></script>
-    <script src='https://unpkg.com/aos@next/dist/aos.js'></script>
-    <script>
-      AOS.init();
-    </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-  </body>
+  </div>
+  <script>
+    window.onload = () => {
+      $(".form").on("submit", function(e) {
+        e.preventDefault();
+
+
+        buttonLoading();
+
+        let password = $("#password").val();
+        let confrimPassword = $("#confrimPassword").val();
+
+        let username = document.getElementById("username");
+
+        let error = [];
+
+        if (username.value.length < 3) {
+          let obj = {
+            msg: "Display name is too short",
+            id: ["usernameField"]
+          }
+          error.push(obj);
+        }
+        if (password !== confrimPassword) {
+          let errObj = {
+            msg: "Password do not match",
+            id: ["passwordField",
+              "confrimPasswordField"]
+          }
+          error.push(errObj);
+        }
+
+        if (error.length > 0) {
+          setTimeout(() => {
+            let bodyForm = document.querySelector(".form");
+            let headList = document.querySelector(".list");
+            headList.innerHTML = "";
+            $(".field.error").removeClass("error");
+            error.map(x => {
+              headList.innerHTML += `<li>${x.msg}</li>`;
+            });
+            
+            let errIdForm = error.map(x => x.id);
+            let errIdFormCon = [].concat.apply([], errIdForm);
+            errIdFormCon.map(x => {
+              document.getElementById(x).classList.add("error");
+            });
+            
+            bodyForm.classList.add("warning");
+            buttonLoading();
+            return;
+          }, 2000);
+        }
+      });
+      function buttonLoading() {
+        let button = document.querySelector(".submitButton");
+        button.classList.toggle("disabled");
+        button.classList.toggle("loading");
+        return;
+      }
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>
+    eruda.init();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 </html>
+</body>

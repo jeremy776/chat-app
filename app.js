@@ -10,6 +10,9 @@ const mongooseLocal = require("passport-local-mongoose");
 const mongoose = require("mongoose");
 const flash = require("connect-flash");
 const ManageUser = require("./models/User");
+const csrf = require("csurf");
+const Protection = csrf({ cookie: true });
+
 require("dotenv").config();
 
 mongoose.connect(process.env.MONGOOSEURL, { useNewUrlParser: true });
@@ -73,10 +76,11 @@ app.post("/login", passport.authenticate("local",{
 // END LOGIN
 
 // Register GET & POST
-app.get('/register', function(req, res) {
+app.get('/register', Protection, function(req, res) {
   res.render('register.ejs', {
     title: title,
-    error: req.flash('error')
+    error: req.flash('error'),
+    csrfToken: req.csrfToken()
   });
 });
 //END REGISTER
