@@ -2,7 +2,6 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -12,6 +11,7 @@ const flash = require("connect-flash");
 const ManageUser = require("./models/User");
 const csrf = require("csurf");
 const Protection = csrf({ cookie: true });
+const url = bodyParser.urlencoded({ extended: false });
 
 require("dotenv").config();
 
@@ -24,28 +24,22 @@ const title = "JustTry";
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(flash());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require("express-session")({
     secret:"verysecretyo",
     resave: false,
     saveUninitialized: false
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new localStrategy({
   usernameField: "email",
   passwordField: "password"
-}, ManageUser.authenticate()));
+}, ManageUser.createStrategy()));
 passport.serializeUser(ManageUser.serializeUser());
 passport.deserializeUser(ManageUser.deserializeUser());
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 // "/" = Get home page
@@ -80,7 +74,18 @@ app.get('/register', Protection, function(req, res) {
   res.render('register.ejs', {
     title: title,
     error: req.flash('error'),
-    csrfToken: req.csrfToken()
+    csrfToken: req.csrfToken(),
+    req: req
+  });
+});
+
+app.post("/register", url, Protection, function(req, res) {
+  console.log(req.body);
+  ManageUser.register(new ManageUser({email: req.body.email, isActive: false, role: "User", displayName: req.body.username}), req.body.password, function(err, user) {
+    if(err) {
+      throw Error(err);
+    }
+    return res.sendStatus(200);
   });
 });
 //END REGISTER

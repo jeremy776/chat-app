@@ -9,6 +9,7 @@
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
+    "csurf": "^1.11.0",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "ejs": "~2.6.1",
@@ -16,7 +17,6 @@
     "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
     "mongoose": "^5.13.7",
-    "morgan": "~1.9.1",
     "passport": "^0.4.1",
     "passport-local-mongoose": "^6.1.0"
   }
