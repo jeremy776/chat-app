@@ -25,7 +25,8 @@ const ManageActivate = require("./models/ActivateManager");
 require("dotenv").config();
 
 mongoose.connect(process.env.MONGOOSEURL, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 mongoose.set('useCreateIndex', true);
 
@@ -164,7 +165,7 @@ app.post("/register", url, Protection, async function(req, res) {
       return res.sendStatus(200);
     });
     req.flash("message",
-      "Your account has been created, please see your email and click the link to activate your account. <a href=''>Resend</a>");
+      "Your account has just been created. We have sent an email to activate your account");
     return res.sendStatus(200);
   });
 });
@@ -184,10 +185,10 @@ app.get("/activate/:id", async function(req, res) {
   getInfoUser.isActive = true;
   getInfoUser.save();
 
-  // delete id
+  // delete database id
   getData.remove();
 
-  req.flash("message", "Anda berhasil mengaktifkan akun anda, sekrang anda bisa login");
+  req.flash("message", "Your account is active, now you can login using the account you just created");
   return res.redirect("/login");
 });
 
