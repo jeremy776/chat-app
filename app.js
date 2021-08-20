@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const app = express();
+const http = require("http");
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
@@ -11,6 +12,7 @@ const mongoose = require("mongoose");
 const flash = require("connect-flash");
 const csrf = require("csurf");
 const nodemailer = require("nodemailer");
+const sharedSession = require("express-socket.io-session");
 const Protection = csrf({
   cookie: true
 });
@@ -33,6 +35,13 @@ mongoose.set('useCreateIndex', true);
 const title = "JustTry";
 const webURL = "http://localhost:3000";
 
+// Set session
+const session = require("express-session")({
+  secret: "verysecretyo",
+  resave: false,
+  saveUninitialized: false
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,11 +53,7 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
-app.use(require("express-session")({
-  secret: "verysecretyo",
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy({
@@ -64,22 +69,65 @@ const {
   uuid
 } = require("uuidv4");
 
-// "/" = Get home page
-app.get("/", function(req, res) {
-  res.render("index.ejs", {
-    title: title,
-    req: req
+
+// Handle socket
+const listen = app.listen(3000);
+const sockeT = require("socket.io");
+const io = sockeT(listen);
+
+io.use(sharedSession(session, {
+  autoSave: true
+}));
+
+let userMap = [];
+io.on("connection", async function (socket) {
+  if (socket.handshake.session.passport) {
+    console.log("User connected: "+ socket.handshake.session.passport.user);
+    let user = await ManageUser.findOne({
+      email: socket.handshake.session.passport.user
+    });
+    user.online = true;
+    await user.save();
+    const listUser = await ManageUser.find({online: true});
+    console.log(listUser);
+    io.emit("user-connect", listUser)
+  } else {
+    console.log("User connected: Not verify user");
+  }
+  socket.on("disconnect", async () => {
+    if (socket.handshake.session.passport) {
+      console.log("User disconnected: "+ socket.handshake.session.passport.user);
+      let user = await ManageUser.findOne({
+        email: socket.handshake.session.passport.user
+      });
+      user.online = false;
+      user.last_online = Date.now();
+      await user.save();
+      io.emit("user-disconnect", user);
+    } else {
+      console.log("User disconnected: Not verify user");
+    }
   });
+});
+
+// get home page
+app.get("/", function(req, res) {
+  res.render("index.ejs",
+    {
+      title: title,
+      req: req
+    });
 });
 
 
 // Login - GET & POST
 app.get('/login', isNotLogin, function(req, res) {
-  res.render("login.ejs", {
-    title: title,
-    error: req.flash("error"),
-    message: req.flash("message")
-  });
+  res.render("login.ejs",
+    {
+      title: title,
+      error: req.flash("error"),
+      message: req.flash("message")
+    });
 });
 
 app.post("/login", async function(req, res, next) {
@@ -123,11 +171,11 @@ app.get('/register', isNotLogin, Protection, function(req, res) {
 app.post("/register", url, Protection, async function(req, res) {
   console.log("New user created");
   ManageUser.register(new ManageUser({
-    email: req.body.email, isActive: false, role: "User", displayName: req.body.username
+    email: req.body.email, online: false, last_online: 0, isActive: false, role: "User", displayName: req.body.username
   }), req.body.password, async function(err, user) {
-    if (err) {
-      throw Error(err);
-    }
+    /*if (err) {
+      throw new Error(err);
+    }*/
 
     // Set id
     const setId = new ManageActivate({
@@ -152,7 +200,6 @@ app.post("/register", url, Protection, async function(req, res) {
     });
     const options = {
       from: process.env.EMAIL,
-      replyTo: req.body.email,
       to: req.body.email,
       subject: "Activate your account",
       html: `<p>You have just created an account at <a href="${webURL}">${title}</a>. and your account must be activated</p><br><p>If you don't think you have created an account at <a href="${webURL}">${title}</a>. Just ignore this message, your email will be deleted from our database within 24 hours</p><br><p>Click the link below to activate your account within 24 hours</p><br><a href="${webURL}/activate/${id.id}">${webURL}/activate/${id.id}</a>`
@@ -186,7 +233,9 @@ app.get("/activate/:id", async function(req, res) {
   getInfoUser.save();
 
   // delete database id
-  getData.remove();
+  getData.remove({}, function(err) {
+    console.log("Database removed")
+  });
 
   req.flash("message", "Your account is active, now you can login using the account you just created");
   return res.redirect("/login");
@@ -194,13 +243,13 @@ app.get("/activate/:id", async function(req, res) {
 
 // user must login to acces the page
 function mustLogin(req, res, next) {
-  if(req.isAuthenticated()) return next();
+  if (req.isAuthenticated()) return next();
   return res.redirect("/login");
 }
 
 // only users who are not logged in can access the page
 function isNotLogin(req, res, next) {
-  if(!req.isAuthenticated()) return next();
+  if (!req.isAuthenticated()) return next();
   return res.redirect("/");
 }
 

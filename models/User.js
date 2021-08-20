@@ -4,6 +4,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const UserSchema = new mongoose.Schema({
     email: String,
     password: String,
+    online: Boolean,
+    last_online: String,
     isActive: Boolean,
     role: String,
     displayName: String
@@ -11,7 +13,6 @@ const UserSchema = new mongoose.Schema({
 
 const ops = {
   usernameField: "email",
-  passwordField: "password",
   errorMessages: {
       MissingPasswordError: 'No password was given',
       AttemptTooSoonError: 'Account is currently locked. Try again later',

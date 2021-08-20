@@ -1,0 +1,12 @@
+body {
+  padding: 20px;
+}
+.headListOnline {
+  padding: 5px;
+  border: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+}
+.no-user-message {
+  text-align: center;
+}
