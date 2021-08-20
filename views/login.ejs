@@ -1,49 +1,64 @@
 <!doctype html>
 <html>
-  <head>
-    <title><%- title %> | Login</title>
-    <meta name="viewport" content="width=device-width, intiial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
-    <link rel='stylesheet' href='https://unpkg.com/aos@next/dist/aos.css'>
-  </head>
-  <body>
-    <div class="header__form container">
-      <div data-aos='zoom-in' data-aos-delay='50' data-aos-duration='1000' class="parent__form">
-        <h1 class="header__text__form">Sign In</h1>
-          <% if(error.length > 0) { %>
-            <div class="alert alert-danger" role="alert">
-              <b><%- error %></b>
+<head>
+  <title><%- title %> | Login</title>
+  <meta name="viewport" content="width=device-width, intiial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="parent">
+    <div class="ui card">
+      <div class="content-1 content">
+        <div class="header">
+          Sign In
+        </div>
+      </div>
+      <div class="content-2 content">
+        <form autocomplete="off" method="POST" action="/login" class="ui form">
+
+          <% if (message.length > 0) {
+            %>
+            <div class="ui message">
+              <p>
+                <%- message %>
+              </p>
             </div>
-          <% } %>
-        <form autocomplete="off" method="POST">
-          <div class="input-group">
+            <%
+          } %>
+
+          <% if (error.length > 0) {
+            %>
+            <div class="ui message">
+              <p>
+                <%- error %>
+              </p>
+            </div>
+            <%
+          } %>
+
+          <div class="field">
             <label for="email">Email</label>
-            <input type="email" placeholder="example@gmail.com" class="form-control" name="email" required>
+            <input type="email" placeholder="example@gmail.com" name="email" id="email" required>
           </div>
-          <div class="input-group">
+          <div id="passwordField" class="field">
             <label for="password">Password</label>
-            <input type="password" placeholder="••••••" class="form-control password" name="password" required>
-            <div class="custom-control custom-checkbox my-1 mr-sm-2">
-              <input type="checkbox" class="custom-control-input" id="show">
-              <label class="custom-control-label" for="show">show password</label>
-            </div>
+            <input type="password" placeholder="Password" id="password" name="password" required>
           </div>
-          <button type="submit">Sign In</button>
+          <button class="ui primary button submitButton" type="submit">Sing In</button>
           <div class="action">
+            <a href="/">Forgot password</a>
             <a href="/register">Don't have an account yet?</a>
-            <a href="/forgot-password">Forgot password</a>
           </div>
         </form>
       </div>
     </div>
-    
-    <script src="./script.js"></script>
-    <script src='https://unpkg.com/aos@next/dist/aos.js'></script>
-    <script>
-      AOS.init();
-    </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-  </body>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>
+    eruda.init();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </html>
+</body>

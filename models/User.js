@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
 
 const ops = {
   usernameField: "email",
+  passwordField: "password",
   errorMessages: {
       MissingPasswordError: 'No password was given',
       AttemptTooSoonError: 'Account is currently locked. Try again later',
