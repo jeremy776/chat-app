@@ -89,8 +89,9 @@ io.on("connection", async function (socket) {
     user.online = true;
     await user.save();
     const listUser = await ManageUser.find({online: true});
-    console.log(listUser);
-    io.emit("user-connect", listUser)
+    //console.log(listUser);
+    io.emit("list-user-connect", listUser);
+    // listen to chat
   } else {
     console.log("User connected: Not verify user");
   }
@@ -119,6 +120,17 @@ app.get("/", function(req, res) {
     });
 });
 
+// get room page
+app.get("/@me/:email", mustLogin, async function(req, res) {
+  const PartnerUser = await ManageUser.findOne({email: req.params.email});
+  if(!PartnerUser) return res.send({message: "User not found"});
+  if(PartnerUser.email === req.user.email) return res.send({message: "Not found"});
+  res.render("roomChat.ejs", {
+    title: title,
+    partner: PartnerUser,
+    req: req
+  });
+});
 
 // Login - GET & POST
 app.get('/login', isNotLogin, function(req, res) {
@@ -171,7 +183,7 @@ app.get('/register', isNotLogin, Protection, function(req, res) {
 app.post("/register", url, Protection, async function(req, res) {
   console.log("New user created");
   ManageUser.register(new ManageUser({
-    email: req.body.email, online: false, last_online: 0, isActive: false, role: "User", displayName: req.body.username
+    email: req.body.email, chats: [], createdAt: Date.now(), online: false, last_online: 0, isActive: false, role: "User", displayName: req.body.username
   }), req.body.password, async function(err, user) {
     /*if (err) {
       throw new Error(err);

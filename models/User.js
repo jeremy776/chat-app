@@ -7,8 +7,13 @@ const UserSchema = new mongoose.Schema({
     online: Boolean,
     last_online: String,
     isActive: Boolean,
+    chats: Array,
     role: String,
-    displayName: String
+    createdAt: String,
+    displayName: {
+      type: String,
+      unique: true
+    }
 });
 
 const ops = {

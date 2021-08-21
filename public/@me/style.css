@@ -1,0 +1,11 @@
+.head {
+  padding: 11px;
+  background-color: #a3f1d6;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.description {
+  font-size: 13px;
+}
+.back i {
+  font-size: 15px;
+}
