@@ -1,5 +1,7 @@
 .head {
   padding: 11px;
+  position: sticky;
+  top: 0;
   background-color: #a3f1d6;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
@@ -8,4 +10,58 @@
 }
 .back i {
   font-size: 15px;
+}
+.box-send-message {
+  width: 100%;
+  position: fixed;
+  background-color: white;
+  display: flex;
+  padding: 10px;
+  bottom: 0;
+}
+.box-send-message .chat-input {
+  width: 90%;
+  margin-right: 5px;
+}
+.box-send-message button {
+  font-size: 16px;
+  background-color: #7289DA;
+  color: white;
+  width: 38px;
+  border-radius: 50%;
+  border: none;
+}
+.friends, .you {
+  padding: 10px;
+  margin-bottom: 7px;
+  border-radius: 5px;
+  max-width: 70%;
+}
+.parent-friends {
+  width: 100%;
+  float: left;
+}
+.parent-you {
+  width: 100%;
+  float: right;
+}
+.you {
+  float: right;
+  background-color: #abe8c8;
+}
+.friends {
+  background-color: #caffdb;
+  float: left;
+}
+.item {
+}
+.message-list::after {
+  content: "";
+  height: 0;
+  clear: both;
+  display: block;
+}
+.message-list {
+  padding: 10px;
+  margin-bottom: 50px;
 }

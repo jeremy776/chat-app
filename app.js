@@ -91,10 +91,22 @@ io.on("connection", async function (socket) {
     const listUser = await ManageUser.find({online: true});
     //console.log(listUser);
     io.emit("list-user-connect", listUser);
-    // listen to chat
+    let room = socket.handshake.query.me+"-"+socket.handshake.query.partner;
+    if(!room) {
+      console.log("Not found");
+    } else if(room) {
+      socket.join(room);
+    }
   } else {
     console.log("User connected: Not verify user");
   }
+  // chat
+  socket.on("chat", m => {
+    let me = socket.handshake.query.me+"-"+socket.handshake.query.partner;
+    let friends = socket.handshake.query.partner+"-"+socket.handshake.query.me;
+    io.to(me).to(friends).emit("chat-message", m);
+  });
+  
   socket.on("disconnect", async () => {
     if (socket.handshake.session.passport) {
       console.log("User disconnected: "+ socket.handshake.session.passport.user);
