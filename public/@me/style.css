@@ -34,7 +34,7 @@
 .friends, .you {
   padding: 10px;
   margin-bottom: 7px;
-  border-radius: 5px;
+  border-radius: 4px;
   max-width: 70%;
 }
 .parent-friends {
@@ -47,6 +47,8 @@
 }
 .you {
   float: right;
+  word-break: break-word;
+ /* border-top-right-radius: 0; */
   background-color: #abe8c8;
 }
 .friends {

@@ -23,6 +23,7 @@ const url = bodyParser.urlencoded({
 // Mongoose Model
 const ManageUser = require("./models/User");
 const ManageActivate = require("./models/ActivateManager");
+const ManageChat = require("./models/ChatManager");
 
 require("dotenv").config();
 
@@ -101,9 +102,16 @@ io.on("connection", async function (socket) {
     console.log("User connected: Not verify user");
   }
   // chat
-  socket.on("chat", m => {
+  socket.on("chat", async m => {
     let me = socket.handshake.query.me+"-"+socket.handshake.query.partner;
     let friends = socket.handshake.query.partner+"-"+socket.handshake.query.me;
+    const test = new ManageChat({
+      to: socket.handshake.query.partner,
+      message: m.message,
+      deleted: false,
+      author: socket.handshake.query.me
+    });
+    test.save();
     io.to(me).to(friends).emit("chat-message", m);
   });
   
@@ -124,7 +132,7 @@ io.on("connection", async function (socket) {
 });
 
 // get home page
-app.get("/", function(req, res) {
+app.get("/", async function(req, res) {
   res.render("index.ejs",
     {
       title: title,
@@ -132,15 +140,48 @@ app.get("/", function(req, res) {
     });
 });
 
+// get home from chat
+app.get("/@me", mustLogin, async function(req, res) {
+  let LastChatList = await ManageChat.find({to: req.user.email});
+  let filterLastChat = LastChatList.map(x => x.author);
+  let removeDuplicate = [...new Set(filterLastChat)];
+  
+  let listUser = [];
+  for(let i = 0; i < removeDuplicate.length; i++) {
+    let user = await ManageUser.findOne({email: removeDuplicate[i]});
+    let body = {
+      author: user.email,
+      displayName: user.displayName,
+      avatar: "https://media.discordapp.net/avatars/834102697477013534/d8af5938eb1ebf31017f25dac10d38df.png"
+    };
+    listUser.push(body);
+  }
+  console.log(listUser);
+  
+  res.render("me.ejs", {
+    req: req,
+    title: title,
+    list: listUser
+  });
+});
+
 // get room page
 app.get("/@me/:email", mustLogin, async function(req, res) {
   const PartnerUser = await ManageUser.findOne({email: req.params.email});
   if(!PartnerUser) return res.send({message: "User not found"});
   if(PartnerUser.email === req.user.email) return res.send({message: "Not found"});
+  
+  let MyChat = await ManageChat.find({to: req.params.email, author: req.user.email});
+  let PartnerChat = await ManageChat.find({to: req.user.email, author: req.params.email});
+  let merge = MyChat.concat(PartnerChat);
+  let filterMerge = merge.sort(function(a, b) {
+    return new Date(a.createdAt) - new Date(b.createdAt);
+  });
   res.render("roomChat.ejs", {
     title: title,
     partner: PartnerUser,
-    req: req
+    req: req,
+    allChat: filterMerge
   });
 });
 
@@ -169,7 +210,7 @@ app.post("/login", async function(req, res, next) {
   }
 
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/@me",
     failureRedirect: "/login",
     failureFlash: true
   })(req, res, next);

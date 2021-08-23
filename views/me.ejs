@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %> - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <style>
+    body {
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ui massive middle aligned divided list">
+    <% list.map(x => { %>
+      <div class="item">
+        <img class="ui avatar image" src="<%- x.avatar %>">
+        <div class="content">
+          <a href="/@me/<%- x.author %>" class="header"><%- x.displayName %></a>
+        </div>
+      </div>
+    <% }) %>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+</body>
+</html>
