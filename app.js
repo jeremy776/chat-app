@@ -72,7 +72,7 @@ const {
 
 
 // Handle socket
-const listen = app.listen(3000);
+const listen = app.listen(process.env.PORT);
 const sockeT = require("socket.io");
 const io = sockeT(listen);
 
