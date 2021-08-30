@@ -1,64 +1,92 @@
 <!doctype html>
 <html>
 <head>
-  <title><%- title %> | Login</title>
+  <title>Login | Design by Brend</title>
   <meta name="viewport" content="width=device-width, intiial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div class="parent">
-    <div class="ui card">
-      <div class="content-1 content">
-        <div class="header">
-          Sign In
+  <div class="container">
+    <div class="my-header">
+      <h1 class="header-text">Welcome</h1>
+      <form method="POST" action="/login" autocomplete="off">
+        <div class="input-group">
+          <input name="email" placeholder="Email" type="email">
         </div>
-      </div>
-      <div class="content-2 content">
-        <form autocomplete="off" method="POST" action="/login" class="ui form">
-
-          <% if (message.length > 0) {
-            %>
-            <div class="ui message">
-              <p>
-                <%- message %>
-              </p>
-            </div>
-            <%
-          } %>
-
-          <% if (error.length > 0) {
-            %>
-            <div class="ui message">
-              <p>
-                <%- error %>
-              </p>
-            </div>
-            <%
-          } %>
-
-          <div class="field">
-            <label for="email">Email</label>
-            <input type="email" placeholder="example@gmail.com" name="email" id="email" required>
-          </div>
-          <div id="passwordField" class="field">
-            <label for="password">Password</label>
-            <input type="password" placeholder="Password" id="password" name="password" required>
-          </div>
-          <button class="ui primary button submitButton" type="submit">Sing In</button>
-          <div class="action">
-            <a href="/">Forgot password</a>
-            <a href="/register">Don't have an account yet?</a>
-          </div>
-        </form>
-      </div>
+        <div class="input-group">
+          <input name="password" placeholder="Password" type="password">
+        </div>
+        <div class="submit">
+          <button type="submit" class="submit-button">Login</button>
+        </div>
+        <div class="action-forgot-regis">
+          <a href="#">Forgot password?</a>
+          <a href="/register">Dont have account yet?</a>
+        </div>
+      </form>
+    </div>
+    <div class="action">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,288L60,250.7C120,213,240,139,360,144C480,149,600,235,720,234.7C840,235,960,149,1080,106.7C1200,64,1320,64,1380,64L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
     </div>
   </div>
+
+
+
+  <!--div class="parent">
+            <div class="ui card">
+              <div class="content-1 content">
+                <div class="header">
+                  Sign In
+                </div>
+              </div>
+              <div class="content-2 content">
+                <form autocomplete="off" method="POST" action="/login" class="ui form">
+
+                  % if (message.length > 0) {
+                    %>
+                    <div class="ui message">
+                      <p>
+                        <- message %>
+                      </p>
+                    </div>
+                    <
+                  } %>
+
+                  < if (error.length > 0) {
+                    %>
+                    <div class="ui message">
+                      <p>
+                        < error %>
+                      </p>
+                    </div>
+                    <
+                  } %>
+
+                  <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" placeholder="example@gmail.com" name="email" id="email" required>
+                  </div>
+                  <div id="passwordField" class="field">
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="Password" id="password" name="password" required>
+                  </div>
+                  <button class="ui primary button submitButton" type="submit">Sing In</button>
+                  <div class="action">
+                    <a href="/">Forgot password</a>
+                    <a href="/register">Don't have an account yet?</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div-->
+
+
   <script src="//cdn.jsdelivr.net/npm/eruda"></script>
   <script>
     eruda.init();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <!--<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-</html>
+--></html>
 </body>

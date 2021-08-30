@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const ChatManager = new mongoose.Schema({
   to: String,
   message: String,
+  date: String,
   deleted: Boolean,
   author: String
 }, { timestamps: true });

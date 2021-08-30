@@ -33,8 +33,8 @@ mongoose.connect(process.env.MONGOOSEURL, {
 });
 mongoose.set('useCreateIndex', true);
 
-const title = "JustTry";
-const webURL = "http://localhost:3000";
+const title = process.env.TITLE;
+const webURL = process.env.WEBURL;
 
 // Set session
 const session = require("express-session")({
@@ -105,9 +105,27 @@ io.on("connection", async function (socket) {
   socket.on("chat", async m => {
     let me = socket.handshake.query.me+"-"+socket.handshake.query.partner;
     let friends = socket.handshake.query.partner+"-"+socket.handshake.query.me;
+    
+    let date = new Date();
+    let arrDay = new Array(7);
+    arrDay[0] = "Minggu";
+    arrDay[1] = "Senin";
+    arrDay[2] = "Selasa";
+    arrDay[3] = "Rabu";
+    arrDay[4] = "Kamis";
+    arrDay[5] = "Jumat";
+    arrDay[6] = "Sabtu";
+    
+    let hariIni = arrDay[date.getDay()];
+    
+    let tanggal = hariIni + "-" + date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
+    // Senin-30-8-2021
+    
     const test = new ManageChat({
       to: socket.handshake.query.partner,
       message: m.message,
+      read: false,
+      date: tanggal,
       deleted: false,
       author: socket.handshake.query.me
     });
@@ -131,6 +149,12 @@ io.on("connection", async function (socket) {
   });
 });
 
+// get router
+const me = require("./router/me.js");
+
+// use router
+app.use("/@me", me);
+
 // get home page
 app.get("/", async function(req, res) {
   res.render("index.ejs",
@@ -140,7 +164,7 @@ app.get("/", async function(req, res) {
     });
 });
 
-// get home from chat
+/* get home from chat
 app.get("/@me", mustLogin, async function(req, res) {
   let LastChatList = await ManageChat.find({to: req.user.email});
   let filterLastChat = LastChatList.map(x => x.author);
@@ -163,7 +187,7 @@ app.get("/@me", mustLogin, async function(req, res) {
     title: title,
     list: listUser
   });
-});
+});*
 
 // get room page
 app.get("/@me/:email", mustLogin, async function(req, res) {
@@ -183,7 +207,7 @@ app.get("/@me/:email", mustLogin, async function(req, res) {
     req: req,
     allChat: filterMerge
   });
-});
+});*/
 
 // Login - GET & POST
 app.get('/login', isNotLogin, function(req, res) {

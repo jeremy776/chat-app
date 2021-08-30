@@ -1,15 +1,60 @@
 .head {
   padding: 11px;
-  position: sticky;
+  position: fixed;
   top: 0;
-  background-color: #a3f1d6;
+  width: 100%;
+  transition: all 0.4s ease;
+  background-color: #6a74f0;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.dateY {
+  display: inline-block;
+  border-radius: 7px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.dateY p {
+  width: auto;
+  padding: 5px;
+  font-weight: bold;
+  color: #40494c;
+  text-align: center;
 }
 .description {
   font-size: 13px;
+  color: rgba(225, 225, 225, 0.8) !important;
+}
+body {
+  background-color: #aeeefe;
+  overscroll-behavior-y: none;
+}
+.item-icon {
+  position: relative;
+  height: 100%;
+}
+.item-icon button {
+  margin-right: 20px;
+  top: 50%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  transform: translateY(50%);
+}
+p {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .back i {
   font-size: 15px;
+}
+.header {
+  color: white !important;
 }
 .box-send-message {
   width: 100%;
@@ -34,7 +79,7 @@
 .friends, .you {
   padding: 10px;
   margin-bottom: 7px;
-  border-radius: 4px;
+  border-radius: 5px;
   max-width: 70%;
 }
 .parent-friends {
@@ -48,14 +93,16 @@
 .you {
   float: right;
   word-break: break-word;
- /* border-top-right-radius: 0; */
-  background-color: #abe8c8;
+  /* border-top-right-radius: 0; */
+  background-color: #aaffe1;
 }
 .friends {
-  background-color: #caffdb;
+  background-color: #a0ecff;
+  word-break: break-word;
   float: left;
 }
-.item {
+.message-send {
+  border: none !important;
 }
 .message-list::after {
   content: "";
@@ -66,4 +113,13 @@
 .message-list {
   padding: 10px;
   margin-bottom: 50px;
+}
+.list {
+  display: flex;
+  justify-content: flex-start;
+}
+.item.user {
+  cursor: pointer;
+  display: block;
+  width: 100%;
 }

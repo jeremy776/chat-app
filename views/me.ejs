@@ -2,30 +2,304 @@
 <html>
 <head>
   <title><%= title %> - Home</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6a74f0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <style>
+    .head {
+      padding: 11px;
+      position: static;
+      z-index: 999;
+      top: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      background-color: var(--blue);
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    }
+    .head .head-icon i {
+      font-size: 15px !important;
+      color: white;
+    }
+    .head .head-icon {
+      display: block;
+      min-width: 60px;
+      line-height: 30px;
+      text-align: center;
+      margin-top: 5px;
+      padding: 5px;
+    }
+    .head .title {
+      color: white;
+      margin: 5px;
+    }
     body {
-      padding: 15px;
+      font-family: sans-serif !important;
+    }
+:root {
+      --blue: #6a74f0;
+    }
+    .message {
+      font-weight: 200 !important;
+      font-size: 15px;
+    }
+    .item .content {
+      display: block;
+      width: 80% !important;
+    }
+    .icon-bar {
+      background-color: white;
+      width: 25px;
+      border-radius: 5px;
+      margin: 5px auto;
+      height: 3px;
+      display: block;
+      transition: all 0.3s ease;
+    }
+    .head-icon.active .icon-bar:first-child {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .head-icon.active .icon-bar:nth-child(2) {
+      opacity: 0;
+    }
+    .head-icon.active .icon-bar:last-child {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+    .setting-profile {
+      transform: translateX(150%);
+      transition: transform 0.4s ease;
+
+      z-index: 9999 !important;
+      background-color: #191c25;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+    }
+    .background {
+      background-color: var(--blue);
+    }
+    .name {
+      font-weight: bold !important;
+      font-size: 20px !important;
+    }
+    .email {
+      margin-top: -15px !important;
+      font-size: 15px !important;
+      color: #e0e2e3b2 !important;
+    }
+    ul {
+      background-color: #e8e8e8 !important;
+    }
+    .navbar-profile {
+      background-color: transparent;
+      display: flex;
+      padding-left: 20px;
+      padding-right: 20px;
+      box-shadow: none;
+      justify-content: space-between;
+    }
+    .back-profile, .edit-banner {
+      z-index: 99 !important;
+    }
+    .back-profile i,
+    .edit-banner i {
+      color: #fff;
+      font-size: 26px;
+    }
+    .head-profile {
+      background-position: 50% 50% !important;
+      background-size: cover !important;
+      background-repeat: no-repeat;
+      height: 200px !important;
+      z-index: -1 !important;
+      background: url("https://media.discordapp.net/attachments/830055801614762017/881919933917847572/images.jpeg");
+      color: white;
+      position: relative !important;
+    }
+    .head-profile::after {
+      content: '' !important;
+      display: block !important;
+      position: absolute !important;
+      width: 100% !important;
+      height: 35% !important;
+      z-index: 1 !important;
+      background-image: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)) !important;
+      bottom: 0 !important;
+    }
+    .head-profile::before {
+      content: '' !important;
+      display: block !important;
+      position: absolute !important;
+      width: 100% !important;
+      height: 50% !important;
+      z-index: 1 !important;
+      background-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0)) !important;
+      top: 0 !important;
+    }
+    .foto-profile {
+      position: absolute;
+      padding-left: 20px;
+      z-index: 3;
+      display: flex;
+      transform: translateY(50%);
+      bottom: 0 !important;
+    }
+    .img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    }
+    .username {
+      margin-left: 10px;
+      margin-top: 15px;
+    }
+    .username p {
+      color: #7a7f80;
+      margin-top: -7px;
+    }
+    .item-seting .content .header {
+      margin-bottom: 5px !important;
     }
   </style>
 </head>
 <body>
 
-  <div class="ui massive middle aligned divided list">
-    <% list.map(x => { %>
-      <div class="item">
-        <img class="ui avatar image" src="<%- x.avatar %>">
-        <div class="content">
-          <a href="/@me/<%- x.author %>" class="header"><%- x.displayName %></a>
-        </div>
-      </div>
-    <% }) %>
+  <div id="head" class="head">
+    <a href="#" id="icon" data-target="slide-out" class="sidenav-trigger head-icon">
+      <div class="icon-bar"></div>
+      <div class="icon-bar"></div>
+      <div class="icon-bar"></div>
+    </a>
+    <div class="title">
+      <h4><%- title %></h4>
     </div>
   </div>
 
+  <ul id="slide-out" class="sidenav">
+    <li>
+      <div class="user-view">
+        <div class="background">
+        </div>
+        <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
+        <h2><span class="white-text name"><%- req.user.displayName %></span></h2>
+        <h4><span class="email"><%- req.user.email %></span></h4>
+      </div>
+    </li>
+    <li><a class="waves-effect" onclick="showSettingModal()" href="#setting"><i class="material-icons">settings</i>Settings</a></li>
+  </ul>
+
+  <div class="body">
+    <div class="ui massive list">
+      <% list.map(x => {
+        %>
+        <div class="item">
+          <img class="ui avatar image" src="<%- x.avatar %>">
+          <div class="content">
+            <div name="<%- x.author %>" class="header">
+              <%- x.displayName %>
+            </div>
+            <p class="message">
+              hello world
+            </p>
+          </div>
+        </div>
+        <%
+      }) %>
+    </div>
+  </div>
+
+  <div class="setting-profile">
+    <div class="head-profile">
+      <nav class="navbar-profile">
+        <a onclick="closeSettingModal()" class="back-profile">
+          <i class="arrow left icon"></i>
+        </a>
+        <div class="edit-banner">
+          <i class="material-icons">edit</i>
+        </div>
+      </nav>
+      <div class="foto-profile">
+        <div class="avatar">
+          <img src="https://media.discordapp.net/attachments/859272371121684500/881770553986392064/unknown.png" class="img">
+        </div>
+        <div class="username">
+          <h5><%- req.user.displayName %></h5>
+          <p>
+            Online
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <br><br><br>
+    <div style="background-color: transparent" class="ui segment">
+  <div style="color: rgba(225,225,225,0.5);" class="ui large inverted relaxed divided list">
+    <div class="item item-seting">
+      <div class="content">
+        <div class="header">@<%- req.user.displayName %></div>
+        Username
+      </div>
+    </div>
+    <div class="item item-seting">
+      <div class="content">
+        <div class="header">Busy</div>
+        Add some info to your account
+      </div>
+    </div>
+    <div class="item item-seting">
+      <div class="content">
+        <div class="header"><%- req.user.email %></div>
+        Email
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </div>
+
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script>
+    eruda.init();
+    function showSettingModal(e) {
+      let setting = document.querySelector(".setting-profile");
+      setting.style.display = "block";
+      setTimeout(() => {
+      setting.style.transform = "translateX(0%)";
+      }, 400);
+      console.log(setting)
+      return;
+    }
+    function closeSettingModal() {
+      let setting = document.querySelector(".setting-profile");
+      setting.style.transform = "translateX(150%)";
+      setTimeout(() => {
+      setting.style.display = "none";
+      }, 500);
+      return;
+    }
+    /*document.getElementById("icon").addEventListener("click", () => {
+    //document.getElementById("nav").classList.toggle("active");
+    document.getElementById("icon").classList.toggle("active");
+  });*/
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems);
+    });
+  </script>
 </body>
 </html>
