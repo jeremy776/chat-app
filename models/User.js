@@ -8,6 +8,10 @@ const UserSchema = new mongoose.Schema({
     last_online: String,
     isActive: Boolean,
     chats: Array,
+    avatar: String,
+    banner: String,
+    id: "String",
+    info: String,
     role: String,
     createdAt: String,
     displayName: {

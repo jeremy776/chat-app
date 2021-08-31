@@ -11,7 +11,7 @@ const ManageChat = require("../models/ChatManager");
 // GET /@me
 router.get("/", mustLogin, async function(req, res) {
   let LastChatList = await ManageChat.find({
-    to: req.user.email
+    to: req.user.id
   });
   let filterLastChat = LastChatList.map(x => x.author);
   let removeDuplicate = [...new Set(filterLastChat)];
@@ -19,11 +19,13 @@ router.get("/", mustLogin, async function(req, res) {
   let listUser = [];
   for (let i = 0; i < removeDuplicate.length; i++) {
     let user = await ManageUser.findOne({
-      email: removeDuplicate[i]});
+      id: removeDuplicate[i]
+    });
     let body = {
-      author: user.email,
+      author: user.id,
+      id: user.id,
       displayName: user.displayName,
-      avatar: "https://media.discordapp.net/avatars/834102697477013534/d8af5938eb1ebf31017f25dac10d38df.png"
+      avatar: user.avatar, //"https://media.discordapp.net/avatars/834102697477013534/d8af5938eb1ebf31017f25dac10d38df.png"
     };
     listUser.push(body);
   }
@@ -34,23 +36,24 @@ router.get("/", mustLogin, async function(req, res) {
   });
 });
 
-router.get("/:email", mustLogin, async function(req, res) {
+router.get("/:id", mustLogin, async function(req, res) {
   const PartnerUser = await ManageUser.findOne({
-    email: req.params.email
+    id: req.params.id
   });
   if (!PartnerUser) return res.send({
     message: "User not found"
   });
-  if (PartnerUser.email === req.user.email) return res.send({
+  if (PartnerUser.id === req.user.id) return res.send({
     message: "Not found"
   });
 
   let MyChat = await ManageChat.find({
-    to: req.params.email, author: req.user.email
+    to: req.params.id, author: req.user.id
   });
   let PartnerChat = await ManageChat.find({
-    to: req.user.email, author: req.params.email
+    to: req.user.id, author: req.params.id
   });
+  
   let merge = MyChat.concat(PartnerChat);
   let filterMerge = merge.sort(function(a, b) {
     return new Date(a.createdAt) - new Date(b.createdAt);

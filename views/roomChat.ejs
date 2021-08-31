@@ -18,10 +18,10 @@
         </button>
       </div>
       <div class="item user">
-        <img class="ui avatar image" src="https://media.discordapp.net/avatars/834102697477013534/d8af5938eb1ebf31017f25dac10d38df.png">
+        <img class="ui avatar image" src="<%- req.user.avatar %>">
         <div class="content">
           <h3 class="header"><%- partner.displayName %></h3>
-          <div class="description status-<%- partner._id %>">
+          <div class="description status-user status-<%- partner._id %>">
           </div>
         </div>
       </div>
@@ -31,10 +31,9 @@
   <div class="body">
     <div class="message-list">
       <div id="item-chat" class="item-chat">
-
         <% allChat.map(x => {
           %>
-          <% if (x.author == req.user.email) {
+          <% if (x.author == req.user.id) {
             %>
             <div class="parent-you">
               <div class="you">
@@ -79,24 +78,23 @@
   <script type="text/javascript">
 
     window.onload = function() {
-     
-     window.moveTo(0, 0);
 
-        if (document.all) {
-            top.window.resizeTo(screen.availWidth, screen.availHeight);
-        }
+      window.moveTo(0,
+        0);
 
-        else if (document.layers || document.getElementById) {
-            if (top.window.outerHeight < screen.availHeight || top.window.outerWidth < screen.availWidth) {
-                top.window.outerHeight = screen.availHeight;
-                top.window.outerWidth = screen.availWidth;
-            }
+      if (document.all) {
+        top.window.resizeTo(screen.availWidth, screen.availHeight);
+      } else if (document.layers || document.getElementById) {
+        if (top.window.outerHeight < screen.availHeight || top.window.outerWidth < screen.availWidth) {
+          top.window.outerHeight = screen.availHeight;
+          top.window.outerWidth = screen.availWidth;
         }
-     
+      }
+
       const socket = io({
         query: {
-          partner: "<%- req.params.email %>",
-          me: "<%- req.user.email %>"
+          partner: "<%- req.params.id %>",
+          me: "<%- req.user.id %>"
         }
       });
       // form
@@ -123,8 +121,8 @@
             return;
           }
           socket.emit("chat", {
-            from: "<%- req.user.email %>",
-            to: "<%- req.params.email %>",
+            from: "<%- req.user.id %>",
+            to: "<%- req.params.id %>",
             message: input.value
           });
           const audio = new Audio('http://localhost:3000/sound/me.mp3');
@@ -137,7 +135,7 @@
         m => {
           let parent = document.querySelector(".item-chat");
 
-          if (m.from === "<%- req.user.email %>") {
+          if (m.from === "<%- req.user.id %>") {
             window.scrollTo({
               top: document.querySelector("body").scrollHeight,
               left: 0,
@@ -166,20 +164,31 @@
       socket.on("list-user-connect",
         user => {
           user.map(x => {
-            if (x.email === "<%- req.params.email %>") {
-              document.querySelector(`.status-${x._id}`).innerHTML = "Online";
+            if (x.id === "<%- req.params.id %>") {
+              let statusText = document.querySelector(`.status-${x._id}`)
+              statusText.classList.add("animated-status")
+              setTimeout(() => {
+                statusText.innerHTML = "Online";
+                statusText.classList.remove("animated-status");
+              }, 1000);
             }
           })
         });
       socket.on("user-disconnect", user => {
-        if (user.email === "<%- req.params.email %>") {
+        if (user.id === "<%- req.params.id %>") {
           let timeDate = Number(`${user.last_online}`);
           let time = new Date(timeDate);
           let hours = ("0" + time.getHours()).slice(-2);
           let minutes = ("0" + time.getMinutes()).slice(-2);
           let day = ("0" + time.getDay()).slice(-2);
           let month = ("0" + time.getMonth()).slice(-2);
-          return document.querySelector(`.status-${user._id}`).innerHTML = `${day}/${month}/${time.getFullYear()} ${hours}:${minutes}`;
+
+          let status = document.querySelector(`.status-${user._id}`);
+          status.classList.add("animated-status");
+          setTimeout(() => {
+            status.innerHTML = `${day}/${month}/${time.getFullYear()} ${hours}:${minutes}`;
+            status.classList.remove("animated-status");
+          }, 1000);
         }
       });
 

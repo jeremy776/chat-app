@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const {
   uuid
 } = require("uuidv4");
-
+const uniqID = require("uniqid");
 
 // Handle socket
 const listen = app.listen(process.env.PORT);
@@ -126,6 +126,7 @@ io.on("connection", async function (socket) {
       message: m.message,
       read: false,
       date: tanggal,
+      type: "Private",
       deleted: false,
       author: socket.handshake.query.me
     });
@@ -260,7 +261,7 @@ app.get('/register', isNotLogin, Protection, function(req, res) {
 app.post("/register", url, Protection, async function(req, res) {
   console.log("New user created");
   ManageUser.register(new ManageUser({
-    email: req.body.email, chats: [], createdAt: Date.now(), online: false, last_online: 0, isActive: false, role: "User", displayName: req.body.username
+    email: req.body.email, chats: [], id: uniqID(req.body.username +"-"), createdAt: Date.now(), info: "User ini tidak memberikan info", online: false, last_online: 0, isActive: false, role: "User", avatar: "https://images-ext-2.discordapp.net/external/6tVaUxectogf8lZc5X8fWTGd2tbzlG6I5AtVbWYYLNI/https/cdn.discordapp.com/embed/avatars/4.pnga", banner: null, displayName: req.body.username
   }), req.body.password, async function(err, user) {
     /*if (err) {
       throw new Error(err);
@@ -327,7 +328,7 @@ app.get("/activate/:id", async function(req, res) {
   });
 
   req.flash("message", "Your account is active, now you can login using the account you just created");
-  return res.redirect("/login");
+  return res.send("Anda berhasil verifikasi akun anda, silahkan login");
 });
 
 // user must login to acces the page

@@ -89,7 +89,9 @@ p {
 .parent-you {
   width: 100%;
   float: right;
+  transition: all 0.5s ease;
 }
+
 .you {
   float: right;
   word-break: break-word;
@@ -97,7 +99,7 @@ p {
   background-color: #aaffe1;
 }
 .friends {
-  background-color: #a0ecff;
+  background-color: white;
   word-break: break-word;
   float: left;
 }
@@ -122,4 +124,15 @@ p {
   cursor: pointer;
   display: block;
   width: 100%;
+}
+.status-user {
+  transform: translateY(0);
+  transition: all 1s ease;
+  opacity: 1;
+  max-height: 250px;
+}
+.status-user.animated-status {
+  opacity: 0;
+  max-height: 250px;
+  transition: all 1s ease;
 }

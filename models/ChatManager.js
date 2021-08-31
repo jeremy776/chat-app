@@ -5,6 +5,7 @@ const ChatManager = new mongoose.Schema({
   message: String,
   date: String,
   deleted: Boolean,
+  type: String,
   author: String
 }, { timestamps: true });
 
