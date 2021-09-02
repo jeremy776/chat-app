@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const mustLogin = require("../function/mustLogin");
 const title = process.env.TITLE;
+const cookieParser = require('cookie-parser');
+const csrf = require("csurf");
+const Protection = csrf({
+  cookie: true
+});
 
 // Mongoose Model
 const ManageUser = require("../models/User");
@@ -9,7 +14,7 @@ const ManageActivate = require("../models/ActivateManager");
 const ManageChat = require("../models/ChatManager");
 
 // GET /@me
-router.get("/", mustLogin, async function(req, res) {
+router.get("/", Protection, mustLogin, async function(req, res) {
   let LastChatList = await ManageChat.find({
     to: req.user.id
   });

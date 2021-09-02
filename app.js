@@ -17,7 +17,8 @@ const Protection = csrf({
   cookie: true
 });
 const url = bodyParser.urlencoded({
-  extended: false
+  extended: false,
+  parameterLimit: 50000,
 });
 
 // Mongoose Model
@@ -47,13 +48,18 @@ const session = require("express-session")({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.json());
 app.use(flash());
 app.use(cookieParser());
+//app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(bodyParser.json({ limit: '50mb' }));
+//app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use(express.urlencoded({
+  limit: "50mb",
   extended: true
 }));
+
 app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -101,6 +107,11 @@ io.on("connection", async function (socket) {
   } else {
     console.log("User connected: Not verify user");
   }
+  // change avatar
+  socket.on("trigger-avatar-change", data => {
+    socket.emit("new-avatar-change", data);
+  });
+  
   // chat
   socket.on("chat", async m => {
     let me = socket.handshake.query.me+"-"+socket.handshake.query.partner;
@@ -158,11 +169,11 @@ app.use("/@me", me);
 
 // get home page
 app.get("/", async function(req, res) {
-  res.render("index.ejs",
-    {
+  return res.redirect("/@me");
+/*    {
       title: title,
       req: req
-    });
+    });*/
 });
 
 /* get home from chat
@@ -305,6 +316,13 @@ app.post("/register", url, Protection, async function(req, res) {
       "Your account has just been created. We have sent an email to activate your account");
     return res.sendStatus(200);
   });
+});
+
+app.post("/change-avatar", url, Protection, async function(req, res) {
+  let data = await ManageUser.findOne({email: req.user.email});
+  data.avatar = req.body.img;
+  data.save();
+  return res.send(200);
 });
 
 // activate

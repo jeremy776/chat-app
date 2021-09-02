@@ -18,7 +18,7 @@
         </button>
       </div>
       <div class="item user">
-        <img class="ui avatar image" src="<%- req.user.avatar %>">
+        <img class="ui avatar image" src="<%- partner.avatar %>">
         <div class="content">
           <h3 class="header"><%- partner.displayName %></h3>
           <div class="description status-user status-<%- partner._id %>">
@@ -202,9 +202,9 @@
       document.querySelector(`.status-<%- partner._id %>`).innerHTML = `${day}/${month}/${time.getFullYear()} ${hours}:${minutes}`;
     };
   </script>
-  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <!--script src="//cdn.jsdelivr.net/npm/eruda"></script>
   <script>
     eruda.init();
-  </script>
+  </script>-->
 </body>
 </html>
