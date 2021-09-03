@@ -81,7 +81,8 @@
       transition: transform 0.4s ease;
       z-index: 9999 !important;
       background-color: #191c25;
-      position: fixed;
+      position: absolute;
+      display: none;
       top: 0;
       left: 0;
       width: 100%;
@@ -207,6 +208,9 @@
     .item-seting .content .header {
       margin-bottom: 5px !important;
     }
+    .item-seting {
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -227,7 +231,7 @@
       <div class="user-view">
         <div class="background">
         </div>
-        <a><img class="circle user-avatar-sidebar" src="<%- req.user.avatar %>"></a>
+        <a><img class="circle user-avatar-sidebar" src="<%- process.env.WEBURL %>/attachment/avatar/<%- req.user.id %>"></a>
         <h2><span class="white-text name"><%- req.user.displayName %></span></h2>
         <h4><span class="email"><%- req.user.email %></span></h4>
       </div>
@@ -240,7 +244,7 @@
       <% list.map(x => {
         %>
         <a href="/@me/<%- x.id %>" class="waves-effect item">
-          <img class="ui avatar image" src="<%- x.avatar %>">
+          <img class="ui avatar image" src="<%- process.env.WEBURL %>/attachment/avatar/<%- x.id %>">
           <div class="content">
             <div name="<%- x.id %>" class="header header-name">
               <%- x.displayName %>
@@ -252,7 +256,7 @@
       }) %>
     </div>
   </div>
-
+  
   <div class="setting-profile">
     <div class="head-profile">
       <nav class="navbar-profile">
@@ -265,12 +269,12 @@
       </nav>
       <div class="foto-profile">
         <div class="avatar">
-          <img src="<%- req.user.avatar %>" class="user-profile-avatar img">
+          <img src="<%- process.env.WEBURL %>/attachment/avatar/<%- req.user.id %>" class="user-profile-avatar img">
         </div>
         <div class="username">
           <h5><%- req.user.displayName %></h5>
-          <p>
-            Online
+          <p class="status online">
+
           </p>
         </div>
       </div>
@@ -278,7 +282,7 @@
 
     <br><br><br>
     <div style="background-color: transparent" class="ui segment">
-      <div style="color: rgba(225,225,225,0.5);" class="ui large inverted relaxed divided list">
+      <div style="color: rgba(225,225,225,0.5);" class="ui large inverted relaxed list">
         <div class="item item-seting">
           <div class="content">
             <div class="header">
@@ -287,12 +291,12 @@
             Username
           </div>
         </div>
-        <div onclick="triggerImage()" class="waves-effect item item-setting">
+        <div onclick="triggerImage()" class="waves-effect item item-seting">
           <div class="content">
             <div class="header">
               Avatar
               <!-- <button onclick="triggerImage()">Change avatar</button>
-                                          --><input style="display: none" type="file" onchange="checkFile()" accept="image/*">
+                                                        --><input style="display: none" type="file" onchange="checkFile()" accept="image/*">
             </div>
             Tap here to change your avatar
           </div>
@@ -355,14 +359,14 @@
     });
     // change avatar
     socket.on("new-avatar-change", data => {
-      if(data.id == "<%- req.user.id %>") {
+      if (data.id == "<%- req.user.id %>") {
         let sideImg = document.querySelector(".user-avatar-sidebar");
         sideImg.src = data.newAvatar;
         return;
       }
     });
-    
-    
+
+
     // if user disconnect
     /*socket.on("user-disconnect", user => {
       let parent = document.querySelector(`status.${user.id}`);
@@ -373,7 +377,7 @@
         }
       }
     });*/
-    
+
     function triggerImage() {
       let file = document.querySelector("input[type=file]");
       file.click();

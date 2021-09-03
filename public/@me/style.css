@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 .head {
   padding: 11px;
   position: fixed;
@@ -80,7 +81,7 @@ p {
   padding: 10px;
   margin-bottom: 7px;
   border-radius: 5px;
-  max-width: 70%;
+  display: inline-block;
 }
 .parent-friends {
   width: 100%;
@@ -89,6 +90,7 @@ p {
 .parent-you {
   width: 100%;
   float: right;
+  max-width: 70%;
   transition: all 0.5s ease;
 }
 
@@ -97,8 +99,10 @@ p {
   word-break: break-word;
   /* border-top-right-radius: 0; */
   background-color: #aaffe1;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .friends {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
   background-color: white;
   word-break: break-word;
   float: left;
@@ -135,4 +139,33 @@ p {
   opacity: 0;
   max-height: 250px;
   transition: all 1s ease;
+}
+
+.header-message-by-system {
+  display: flex;
+  justify-content: center;
+}
+.message-by-system {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  background-color: #6a74f0;
+  color: white;
+  width: auto;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  max-width: 80%;
+  font-size: 13px;
+  font-family: "Roboto", sans-serif;
+  padding: 5px 10px 5px 10px;
+}
+.parent-you .date,
+.parent-friends .date {
+  font-size: 10px;
+  display: block;
+  text-align: right;
+  color: #6e6e6e;
+  margin-top: -10px;
+  font-family: "Roboto", sans-serif;
 }

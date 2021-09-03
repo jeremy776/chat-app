@@ -18,7 +18,7 @@
         </button>
       </div>
       <div class="item user">
-        <img class="ui avatar image" src="<%- partner.avatar %>">
+        <img class="ui avatar image" src="<%- process.env.WEBURL %>/attachment/avatar/<%- partner.id %>">
         <div class="content">
           <h3 class="header"><%- partner.displayName %></h3>
           <div class="description status-user status-<%- partner._id %>">
@@ -31,6 +31,11 @@
   <div class="body">
     <div class="message-list">
       <div id="item-chat" class="item-chat">
+        <div class="header-message-by-system">
+          <div class="message-by-system">
+            Pesan di simpan secara pribadi, jadi cuma kamu dan <b><%- partner.displayName %></b> yang bisa melihat pesan disini
+          </div>
+        </div>
         <% allChat.map(x => {
           %>
           <% if (x.author == req.user.id) {
@@ -40,6 +45,16 @@
                 <p>
                   <%- x.message %>
                 </p>
+              <span class="date">
+                <%
+                let month = ["December", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"];
+                let messageMonth = month[x.createdAt.getMonth()];
+                let hours = ("0" + x.createdAt.getHours()).slice(-2);
+                let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
+                let day = ("0" + x.createdAt.getDay()).slice(-2);
+                %>
+                <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
+              </span>
               </div>
             </div>
             <%
@@ -50,6 +65,16 @@
                 <p>
                   <%- x.message %>
                 </p>
+              <span class="date">
+                <%
+                let month = ["December", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"];
+                let messageMonth = month[x.createdAt.getMonth()];
+                let hours = ("0" + x.createdAt.getHours()).slice(-2);
+                let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
+                let day = ("0" + x.createdAt.getDay()).slice(-2);
+                %>
+                <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
+              </span>
               </div>
             </div>
             <%

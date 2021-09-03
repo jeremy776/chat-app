@@ -53,7 +53,9 @@ app.use(cookieParser());
 //app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.json({
+  limit: '50mb'
+}));
 //app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use(express.urlencoded({
   limit: "50mb",
@@ -95,13 +97,15 @@ io.on("connection", async function (socket) {
     });
     user.online = true;
     await user.save();
-    const listUser = await ManageUser.find({online: true});
+    const listUser = await ManageUser.find({
+      online: true
+    });
     //console.log(listUser);
     io.emit("list-user-connect", listUser);
     let room = socket.handshake.query.me+"-"+socket.handshake.query.partner;
-    if(!room) {
+    if (!room) {
       console.log("Not found");
-    } else if(room) {
+    } else if (room) {
       socket.join(room);
     }
   } else {
@@ -111,12 +115,12 @@ io.on("connection", async function (socket) {
   socket.on("trigger-avatar-change", data => {
     socket.emit("new-avatar-change", data);
   });
-  
+
   // chat
   socket.on("chat", async m => {
     let me = socket.handshake.query.me+"-"+socket.handshake.query.partner;
     let friends = socket.handshake.query.partner+"-"+socket.handshake.query.me;
-    
+
     let date = new Date();
     let arrDay = new Array(7);
     arrDay[0] = "Minggu";
@@ -126,12 +130,12 @@ io.on("connection", async function (socket) {
     arrDay[4] = "Kamis";
     arrDay[5] = "Jumat";
     arrDay[6] = "Sabtu";
-    
+
     let hariIni = arrDay[date.getDay()];
-    
+
     let tanggal = hariIni + "-" + date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
     // Senin-30-8-2021
-    
+
     const test = new ManageChat({
       to: socket.handshake.query.partner,
       message: m.message,
@@ -144,7 +148,7 @@ io.on("connection", async function (socket) {
     test.save();
     io.to(me).to(friends).emit("chat-message", m);
   });
-  
+
   socket.on("disconnect", async () => {
     if (socket.handshake.session.passport) {
       console.log("User disconnected: "+ socket.handshake.session.passport.user);
@@ -170,7 +174,7 @@ app.use("/@me", me);
 // get home page
 app.get("/", async function(req, res) {
   return res.redirect("/@me");
-/*    {
+  /*    {
       title: title,
       req: req
     });*/
@@ -181,7 +185,6 @@ app.get("/@me", mustLogin, async function(req, res) {
   let LastChatList = await ManageChat.find({to: req.user.email});
   let filterLastChat = LastChatList.map(x => x.author);
   let removeDuplicate = [...new Set(filterLastChat)];
-  
   let listUser = [];
   for(let i = 0; i < removeDuplicate.length; i++) {
     let user = await ManageUser.findOne({email: removeDuplicate[i]});
@@ -193,7 +196,6 @@ app.get("/@me", mustLogin, async function(req, res) {
     listUser.push(body);
   }
   console.log(listUser);
-  
   res.render("me.ejs", {
     req: req,
     title: title,
@@ -206,7 +208,6 @@ app.get("/@me/:email", mustLogin, async function(req, res) {
   const PartnerUser = await ManageUser.findOne({email: req.params.email});
   if(!PartnerUser) return res.send({message: "User not found"});
   if(PartnerUser.email === req.user.email) return res.send({message: "Not found"});
-  
   let MyChat = await ManageChat.find({to: req.params.email, author: req.user.email});
   let PartnerChat = await ManageChat.find({to: req.user.email, author: req.params.email});
   let merge = MyChat.concat(PartnerChat);
@@ -319,12 +320,28 @@ app.post("/register", url, Protection, async function(req, res) {
 });
 
 app.post("/change-avatar", url, Protection, async function(req, res) {
-  let data = await ManageUser.findOne({email: req.user.email});
+  let data = await ManageUser.findOne({
+    email: req.user.email
+  });
   data.avatar = req.body.img;
   data.save();
   return res.send(200);
 });
+// avatar
+app.get("/attachment/avatar/:id", async function(req, res) {
+  let user = await ManageUser.findOne({
+    id: req.params.id
+  });
+  const dat = user.avatar;
+  const data = dat.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+  const img = Buffer.from(data, "base64");
 
+  res.writeHead(200, {
+    'Content-Type': 'image/png',
+    'Content-Length': img.length
+  });
+  res.end(img);
+});
 // activate
 app.get("/activate/:id", async function(req, res) {
   // get data from id
