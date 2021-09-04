@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" href="./style.css">
   <meta name="theme-color" content="#6a74f0">
+
 </head>
 <body id="body">
 
@@ -36,45 +37,67 @@
             Pesan di simpan secara pribadi, jadi cuma kamu dan <b><%- partner.displayName %></b> yang bisa melihat pesan disini
           </div>
         </div>
-        <% allChat.map(x => {
+        <% allChat.map((x, i) => {
           %>
           <% if (x.author == req.user.id) {
             %>
-            <div class="parent-you">
+            <div ondblclick="doubleClick('<%- i %>')" class="parent-you">
               <div class="you">
                 <p>
                   <%- x.message %>
                 </p>
-              <span class="date">
-                <%
-                let month = ["December", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"];
-                let messageMonth = month[x.createdAt.getMonth()];
-                let hours = ("0" + x.createdAt.getHours()).slice(-2);
-                let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
-                let day = ("0" + x.createdAt.getDay()).slice(-2);
-                %>
-                <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
-              </span>
+                <span class="date">
+                  <%
+                  let month = ["December",
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November"];
+                  let messageMonth = month[x.createdAt.getMonth()];
+                  let hours = ("0" + x.createdAt.getHours()).slice(-2);
+                  let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
+                  let day = ("0" + x.createdAt.getDay()).slice(-2);
+                  %>
+                  <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
+                </span>
               </div>
             </div>
             <%
           } else {
             %>
-            <div class="parent-friends">
+            <div ondblclick="doubleClick('<%- i %>')" id="<%- i %>" class="parent-friends">
               <div class="friends">
                 <p>
                   <%- x.message %>
                 </p>
-              <span class="date">
-                <%
-                let month = ["December", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"];
-                let messageMonth = month[x.createdAt.getMonth()];
-                let hours = ("0" + x.createdAt.getHours()).slice(-2);
-                let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
-                let day = ("0" + x.createdAt.getDay()).slice(-2);
-                %>
-                <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
-              </span>
+                <span class="date">
+                  <%
+                  let month = ["December",
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November"];
+                  let messageMonth = month[x.createdAt.getMonth()];
+                  let hours = ("0" + x.createdAt.getHours()).slice(-2);
+                  let minutes = ("0" + x.createdAt.getMinutes()).slice(-2);
+                  let day = ("0" + x.createdAt.getDay()).slice(-2);
+                  %>
+                  <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
+                </span>
               </div>
             </div>
             <%
@@ -102,20 +125,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
   <script type="text/javascript">
 
+    function doubleClick(id) {
+      return alert("double click");
+    }
+
+
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.querySelector("body").scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    },
+      500);
+      
     window.onload = function() {
-
-      window.moveTo(0,
-        0);
-
-      if (document.all) {
-        top.window.resizeTo(screen.availWidth, screen.availHeight);
-      } else if (document.layers || document.getElementById) {
-        if (top.window.outerHeight < screen.availHeight || top.window.outerWidth < screen.availWidth) {
-          top.window.outerHeight = screen.availHeight;
-          top.window.outerWidth = screen.availWidth;
-        }
-      }
-
+      
+    
       const socket = io({
         query: {
           partner: "<%- req.params.id %>",
@@ -138,6 +164,7 @@
       let userElement = document.querySelector(".user");
       userElement.addEventListener("click",
         function() {});
+        
       form.addEventListener("submit",
         function(e) {
           e.preventDefault();
@@ -150,8 +177,6 @@
             to: "<%- req.params.id %>",
             message: input.value
           });
-          const audio = new Audio('http://localhost:3000/sound/me.mp3');
-          audio.play();
           input.value = "";
           input.blur();
         });
@@ -166,21 +191,66 @@
               left: 0,
               behavior: 'smooth'
             });
+            const audio = new Audio('http://localhost:3000/sound/me.mp3');
+            audio.play();
+            
+             let month = ["December",
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November"];
+                    let x = new Date();
+                  let messageMonth = month[x.getMonth()];
+                  let hours = ("0" + x.getHours()).slice(-2);
+                  let minutes = ("0" + x.getMinutes()).slice(-2);
+                  let day = ("0" + x.getDay()).slice(-2);
+            
             parent.innerHTML += `<div class="parent-you">
             <div class="you">
             <p>
             ${m.message}
             </p>
+            <span class="date">
+            ${day} ${messageMonth} ${hours}:${minutes}
+            </span>
             </div>
             </div>`;
           } else {
             const audio = new Audio('http://localhost:3000/sound/partner.mp3');
             audio.play();
+             let month = ["December",
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November"];
+                    let x = new Date();
+                  let messageMonth = month[x.getMonth()];
+                  let hours = ("0" + x.getHours()).slice(-2);
+                  let minutes = ("0" + x.getMinutes()).slice(-2);
+                  let day = ("0" + x.getDay()).slice(-2);
+            
             parent.innerHTML += `<div class="parent-friends">
             <div class="friends">
             <p>
             ${m.message}
             </p>
+            <span class="date">
+            ${day} ${messageMonth} ${hours}:${minutes}
+            </span>
             </div>
             </div>`;
           }
@@ -227,9 +297,9 @@
       document.querySelector(`.status-<%- partner._id %>`).innerHTML = `${day}/${month}/${time.getFullYear()} ${hours}:${minutes}`;
     };
   </script>
-  <!--script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
   <script>
     eruda.init();
-  </script>-->
+  </script>
 </body>
 </html>

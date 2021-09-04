@@ -54,11 +54,11 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(bodyParser.json({
-  limit: '50mb'
+  limit: '5mb'
 }));
 //app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 app.use(express.urlencoded({
-  limit: "50mb",
+  limit: "5mb",
   extended: true
 }));
 
@@ -333,15 +333,18 @@ app.get("/attachment/avatar/:id", async function(req, res) {
     id: req.params.id
   });
   const dat = user.avatar;
-  const data = dat.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-  const img = Buffer.from(data, "base64");
-
+  const img = Buffer.from(dat, "base64");
+  console.log(img);
+  
+  let newImg;
+  
   res.writeHead(200, {
     'Content-Type': 'image/png',
     'Content-Length': img.length
   });
   res.end(img);
 });
+
 // activate
 app.get("/activate/:id", async function(req, res) {
   // get data from id

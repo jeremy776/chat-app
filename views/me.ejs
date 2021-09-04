@@ -401,22 +401,25 @@
     function checkFile() {
       const preview = document.querySelector(".user-profile-avatar");
       const file = document.querySelector('input[type=file]').files[0];
+      console.log(file.size)
+      /*if(file.size > 2097152) {
+        return alert("Avatar must be under 2MiB. "+`Current size: ${file.size}`)
+      }*/
       const reader = new FileReader();
-      console.log(dataWEB.url)
       reader.onloadend = function () {
         preview.src = reader.result;
         $.ajax({
           url: "/change-avatar",
           method: "post",
           data: {
-            img: reader.result,
+            img: reader.result.replace(/^data:image\/[a-z]+;base64,/, ""),
             _csrf: "<%- req.csrfToken() %>"
           },
           success: function() {
             socket.emit("trigger-avatar-change", {
               name: "<%- req.user.displayName %>",
               id: "<%- req.user.id %>",
-              newAvatar: reader.result
+              newAvatar: reader.result.replace(/^data:image\/[a-z]+;base64,/, "")
             });
             return console.log("Avatar changed");
           },
@@ -431,6 +434,7 @@
       } else {
         preview.src = "";
       }
+      
     }
     /*document.getElementById("icon").addEventListener("click", () => {
     //document.getElementById("nav").classList.toggle("active");
