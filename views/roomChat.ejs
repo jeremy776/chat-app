@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" href="./style.css">
   <meta name="theme-color" content="#6a74f0">
-
+  <link rel="stylesheet" href="../tailwindcss/compile.css">
 </head>
 <body id="body">
 
   <div class="head">
-    <div class="ui big list">
+    <div class="ui big wasu list">
       <div class="item item-icon">
         <button class="icon">
           <i class="arrow left icon"></i>
@@ -28,21 +28,22 @@
       </div>
     </div>
   </div>
+
   <br><br><br><br>
   <div class="body">
     <div class="message-list">
       <div id="item-chat" class="item-chat">
         <div class="header-message-by-system">
           <div class="message-by-system">
-            Pesan di simpan secara pribadi, jadi cuma kamu dan <b><%- partner.displayName %></b> yang bisa melihat pesan disini
+            Pesan di simpan secara pribadi, jadi cuma kamu dan <b><%- partner.displayName %></b> yang bisa melihat pesan di sini.
           </div>
         </div>
         <% allChat.map((x, i) => {
           %>
           <% if (x.author == req.user.id) {
             %>
-            <div ondblclick="doubleClick('<%- i %>')" class="parent-you">
-              <div class="you">
+            <div x-data="dropdown()" ondblclick="doubleClick('<%- i %>')" class="parent-you">
+              <div x-spread="trigger" class="you">
                 <p>
                   <%- x.message %>
                 </p>
@@ -67,6 +68,11 @@
                   %>
                   <%- day %> <%- messageMonth %> <%- hours %>:<%- minutes %>
                 </span>
+              </div>
+              <div class="dropdown-list mr-4 border-none transition bg-gray-700 rounded-md" id="color-menu" x-spread="dropdown" x-position="left-start" x-cloak>
+                <a href="#" class="dropdown-item text-gray-200">Edit</a>
+                <a href="#" class="dropdown-item text-gray-200">Reply</a>
+                <a href="#" class="dropdown-item text-gray-200">Delete</a>
               </div>
             </div>
             <%
@@ -123,11 +129,12 @@
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/kutty@latest/dist/kutty.min.js"></script>
   <script type="text/javascript">
 
-    function doubleClick(id) {
+    /*function doubleClick(id) {
       return alert("double click");
-    }
+    }*/
 
 
     setTimeout(() => {
@@ -138,10 +145,10 @@
       });
     },
       500);
-      
+
     window.onload = function() {
-      
-    
+
+
       const socket = io({
         query: {
           partner: "<%- req.params.id %>",
@@ -159,12 +166,12 @@
       let buttonIcon = document.querySelector(".icon");
       buttonIcon.addEventListener("click",
         function() {
-          return window.location.href = "/@me";
+          return window.location.href = "/me";
         });
       let userElement = document.querySelector(".user");
       userElement.addEventListener("click",
         function() {});
-        
+
       form.addEventListener("submit",
         function(e) {
           e.preventDefault();
@@ -193,25 +200,25 @@
             });
             const audio = new Audio('http://localhost:3000/sound/me.mp3');
             audio.play();
-            
-             let month = ["December",
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November"];
-                    let x = new Date();
-                  let messageMonth = month[x.getMonth()];
-                  let hours = ("0" + x.getHours()).slice(-2);
-                  let minutes = ("0" + x.getMinutes()).slice(-2);
-                  let day = ("0" + x.getDay()).slice(-2);
-            
+
+            let month = ["December",
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November"];
+            let x = new Date();
+            let messageMonth = month[x.getMonth()];
+            let hours = ("0" + x.getHours()).slice(-2);
+            let minutes = ("0" + x.getMinutes()).slice(-2);
+            let day = ("0" + x.getDay()).slice(-2);
+
             parent.innerHTML += `<div class="parent-you">
             <div class="you">
             <p>
@@ -225,24 +232,24 @@
           } else {
             const audio = new Audio('http://localhost:3000/sound/partner.mp3');
             audio.play();
-             let month = ["December",
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November"];
-                    let x = new Date();
-                  let messageMonth = month[x.getMonth()];
-                  let hours = ("0" + x.getHours()).slice(-2);
-                  let minutes = ("0" + x.getMinutes()).slice(-2);
-                  let day = ("0" + x.getDay()).slice(-2);
-            
+            let month = ["December",
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November"];
+            let x = new Date();
+            let messageMonth = month[x.getMonth()];
+            let hours = ("0" + x.getHours()).slice(-2);
+            let minutes = ("0" + x.getMinutes()).slice(-2);
+            let day = ("0" + x.getDay()).slice(-2);
+
             parent.innerHTML += `<div class="parent-friends">
             <div class="friends">
             <p>

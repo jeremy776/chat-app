@@ -2,11 +2,17 @@
 <html>
   <head>
     <title>Error | <%- error.status %></title>
+    <link href="../tailwindcss/compile.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-  <body>
-    <h1><%- message %></h1>
-    <h2><%- error.status %></h2>
-    <pre><%- error.stack %></pre>
+  <body style="background-color: #191c25;">
+    <div class="p-7">
+      <div class="bg-white rounded-md p-5 shadow-md">
+      <h1 class="font-semibold mb-5 text-2xl"><%- error.status %> | <%- message %></h1>
+      <div class="overflow-x-scroll text-gray-500">
+        <pre><%- error.stack %></pre>
+      </div>
+      </div>
+    </div>
   </body>
 </html>

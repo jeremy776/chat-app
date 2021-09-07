@@ -130,7 +130,8 @@
       color: #00fb61;
     }
     .status.offline::after {
-      content: "Offline",
+      content: "Offline";
+      color: #676767;
       opacity: 0.7;
     }
     .header-name {
@@ -243,20 +244,20 @@
     <div class="ui massive list">
       <% list.map(x => {
         %>
-        <a href="/@me/<%- x.id %>" class="waves-effect item">
+        <a href="/me/<%- x.id %>" class="waves-effect item">
           <img class="ui avatar image" src="<%- process.env.WEBURL %>/attachment/avatar/<%- x.id %>">
           <div class="content">
             <div name="<%- x.id %>" class="header header-name">
               <%- x.displayName %>
             </div>
-            <p class="status status-<%- x.id.replace(/ /g, ""); %>"></p>
+            <p class="status offline status-<%- x.id.replace(/ /g, ""); %>"></p>
           </div>
         </a>
         <%
       }) %>
     </div>
   </div>
-  
+
   <div class="setting-profile">
     <div class="head-profile">
       <nav class="navbar-profile">
@@ -296,7 +297,7 @@
             <div class="header">
               Avatar
               <!-- <button onclick="triggerImage()">Change avatar</button>
-                                                        --><input style="display: none" type="file" onchange="checkFile()" accept="image/*">
+                                                                      --><input style="display: none" type="file" onchange="checkFile()" accept="image/*">
             </div>
             Tap here to change your avatar
           </div>
@@ -340,7 +341,7 @@
     const dataWEB = {
       url: "https://localhost:3000",
       port: "3000",
-      path: "/@me"
+      path: "/me"
     }
     // Connect to Socket io
     const socket = io();
@@ -352,7 +353,7 @@
         let parent = document.querySelector(`.status-${x.id}`);
 
         if (parent !== null) {
-
+          parent.classList.remove("offline");
           parent.classList.add("online");
         }
       });
@@ -368,15 +369,16 @@
 
 
     // if user disconnect
-    /*socket.on("user-disconnect", user => {
+    socket.on("user-disconnect", user => {
       let parent = document.querySelector(`status.${user.id}`);
-      if(parent) {
-        if(parent.contains("online")) {
+      if (parent) {
+        if (parent.contains("online")) {
           parent.classList.remove("online");
           return parent.classList.add("offline");
         }
+        return parent.classList.add("offline");
       }
-    });*/
+    });
 
     function triggerImage() {
       let file = document.querySelector("input[type=file]");
@@ -434,7 +436,7 @@
       } else {
         preview.src = "";
       }
-      
+
     }
     /*document.getElementById("icon").addEventListener("click", () => {
     //document.getElementById("nav").classList.toggle("active");

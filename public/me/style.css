@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 .head {
   padding: 11px;
-  position: fixed;
+  position: fixed !important;
   top: 0;
   width: 100%;
   transition: all 0.4s ease;
@@ -27,21 +27,21 @@
   color: rgba(225, 225, 225, 0.8) !important;
 }
 body {
-  background-color: #aeeefe;
+  background-color: #191c25;
   overscroll-behavior-y: none;
 }
 .item-icon {
-  position: relative;
+  position: relative !important;
   height: 100%;
 }
 .item-icon button {
   margin-right: 20px;
-  top: 50%;
+  top: 50% !important;
   background-color: transparent;
   border: none;
   outline: none;
   color: white;
-  transform: translateY(50%);
+  transform: translateY(50%) !important;
 }
 .you,
 .friends {
@@ -75,13 +75,20 @@ body {
   background-color: #7289DA;
   color: white;
   width: 38px;
+  position: relative;
   border-radius: 50%;
   border: none;
+}
+.box-send-message button i {
+  position: absolute;
+  top: 40%;
+  left: 49%;
+  transform: translate(-50%, -50%);
 }
 .friends, .you {
   padding: 10px;
   margin-bottom: 7px;
-  border-radius: 5px;
+  border-radius: 4px;
   display: inline-block;
 }
 .parent-friends {
@@ -99,7 +106,7 @@ body {
   float: right;
   word-break: break-word;
   /* border-top-right-radius: 0; */
-  background-color: #aaffe1;
+  background-color: #49fbcf;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .friends {
@@ -121,14 +128,15 @@ body {
   padding: 10px;
   margin-bottom: 50px;
 }
-.list {
-  display: flex;
-  justify-content: flex-start;
+.wasu.list {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: flex-start !important;
 }
 .item.user {
   cursor: pointer;
   display: block;
-  width: 100%;
+  width: 50%;
 }
 .status-user {
   transform: translateY(0);
@@ -166,7 +174,7 @@ body {
   font-size: 10px;
   display: block;
   text-align: right;
+  margin-top: 5px;
   color: #6e6e6e;
-  margin-top: -10px;
   font-family: "Roboto", sans-serif;
 }
