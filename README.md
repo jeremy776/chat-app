@@ -30,6 +30,13 @@ TITLE=mychatApp
 WEBURL=http://localhost:3000
 ```
 
+## Features
+- Register - Create user account
+- Login - Login to user account
+- email activation when register
+- send message privately
+  - /me/userID
+
 ## Fix error
 **1. Invalid Login**
 - Make sure check your password
