@@ -1,9 +1,14 @@
 # Chat App
 
 ## Run
-```has
+```bash
 $ npm install
 $ npm start
+```
+
+## Compile Tailwindcss
+```bash
+$ npx tailwindcss -o public/tailwindcss/compile.css
 ```
 
 ## Configuration
