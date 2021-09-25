@@ -45,3 +45,7 @@ WEBURL=http://localhost:3000
   + [Check setting](https://myaccount.google.com/security)
 
 - [Full tutorial by petanikode](https://www.petanikode.com/nodejs-email/)
+
+
+### Notes
+**This project is not completely finished yet**
